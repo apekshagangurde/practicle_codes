@@ -1,0 +1,200 @@
+/* Full screen styling adjustments */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+/* Container that takes full width */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1, h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Code container styling */
+.code-container {
+    background-color: #333;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    max-height: 500px;
+}
+
+/* Code block styling */
+.code-container pre {
+    font-family: Consolas, monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Syntax highlighting */
+.keyword {
+    color: #66d9ef;
+}
+
+.comment {
+    color: #75715e;
+    font-style: italic;
+}
+
+.string {
+    color: #e6db74;
+}
+
+.number {
+    color: #ae81ff;
+}
+
+/* Button styling */
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #5c85d6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3d66bd;
+}
+
+/* Explanation section styling */
+.explanation {
+    background-color: #fafafa;
+    border-left: 4px solid #5c85d6;
+    padding: 15px;
+    border-radius: 5px;
+    color: #333;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.explanation p {
+    margin: 10px 0;
+}
+/* Full screen styling adjustments */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+/* Container that takes full width */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1, h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Code container styling */
+.code-container {
+    background-color: #333;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    max-height: 500px;
+}
+
+/* Code block styling */
+.code-container pre {
+    font-family: Consolas, monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Syntax highlighting */
+.keyword {
+    color: #66d9ef;
+}
+
+.comment {
+    color: #75715e;
+    font-style: italic;
+}
+
+.string {
+    color: #e6db74;
+}
+
+.number {
+    color: #ae81ff;
+}
+
+/* Button styling */
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #5c85d6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3d66bd;
+}
+
+/* Explanation section styling */
+.explanation {
+    background-color: #fafafa;
+    border-left: 4px solid #5c85d6;
+    padding: 15px;
+    border-radius: 5px;
+    color: #333;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.explanation p {
+    margin: 10px 0;
+}

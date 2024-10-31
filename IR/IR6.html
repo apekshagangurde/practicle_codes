@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IR1 Code Example with Explanation</title>
+    <link rel="stylesheet" href="ir1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>IR1: Product Information Scraper Code with Explanation</h1>
+        
+        <div class="code-container">
+            <pre id="code">
+<span class="keyword">import</span> requests
+<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup
+
+<span class="comment"># Define the URL of the specific test site (E-commerce site)</span>
+url = <span class="string">"https://webscraper.io/test-sites/e-commerce/allinone/computers"</span>
+
+<span class="comment"># Send a GET request to the URL</span>
+response = requests.get(url)
+
+<span class="comment"># Check if the request was successful (status code 200)</span>
+<span class="keyword">if</span> response.status_code == <span class="number">200</span>:
+    <span class="comment"># Parse the HTML content of the page using BeautifulSoup</span>
+    soup = BeautifulSoup(response.text, <span class="string">'html.parser'</span>)
+
+    <span class="comment"># Find all product divs</span>
+    product_divs = soup.find_all(<span class="string">'div'</span>, class_=<span class="string">'card thumbnail'</span>)
+
+    <span class="comment"># Loop through each product div and extract product information</span>
+    <span class="keyword">for</span> product_div <span class="keyword">in</span> product_divs:
+        <span class="comment"># Extract product name</span>
+        product_name = product_div.find(<span class="string">'a'</span>, class_=<span class="string">'title'</span>).text.strip()
+        
+        <span class="comment"># Extract product price</span>
+        product_price = product_div.find(<span class="string">'h4'</span>, class_=<span class="string">'pull-right'</span>).text.strip()
+
+        <span class="comment"># Print or save the extracted data</span>
+        print(<span class="string">"Product Name:"</span>, product_name)
+        print(<span class="string">"Product Price:"</span>, product_price)
+        print(<span class="string">"\n"</span>)
+<span class="keyword">else</span>:
+    print(<span class="string">"Failed to retrieve the page. Status code:"</span>, response.status_code)
+            </pre>
+        </div>
+        
+        <button onclick="copyCode()">Copy Code</button>
+
+        <h2>Explanation of the Code:</h2>
+        <div class="explanation">
+            <p><strong>import requests</strong>: Imports the requests library, which allows us to send HTTP requests like GET requests to access web content.</p>
+            <p><strong>from bs4 import BeautifulSoup</strong>: Imports the BeautifulSoup class from the bs4 library, used to parse HTML and XML documents for web scraping.</p>
+            <p><strong>url = "https://webscraper.io/test-sites/e-commerce/allinone/computers"</strong>: Sets the target URL, pointing to a page on webscraper.io for scraping product data.</p>
+            <p><strong>response = requests.get(url)</strong>: Sends an HTTP GET request to the specified URL to fetch its content, saving the response in the <code>response</code> variable.</p>
+            <p><strong>if response.status_code == 200</strong>: Checks if the server responded with a 200 status code, which means the request was successful. Only proceeds if this condition is true.</p>
+            <p><strong>soup = BeautifulSoup(response.text, 'html.parser')</strong>: Parses the HTML content of the response using BeautifulSoup and stores the parsed content in the <code>soup</code> variable.</p>
+            <p><strong>product_divs = soup.find_all('div', class_='card thumbnail')</strong>: Searches for all <code>div</code> elements with the class "card thumbnail," which represent individual products, and stores them in <code>product_divs</code>.</p>
+            <p><strong>for product_div in product_divs</strong>: Loops through each product <code>div</code> found in <code>product_divs</code>.</p>
+            <p><strong>product_name = product_div.find('a', class_='title').text.strip()</strong>: Finds the <code>a</code> element with the class "title" within each product <code>div</code>, extracts the product name text, and removes any leading or trailing whitespace.</p>
+            <p><strong>product_price = product_div.find('h4', class_='pull-right').text.strip()</strong>: Finds the <code>h4</code> element with the class "pull-right" within each product <code>div</code>, extracts the price text, and removes any leading or trailing whitespace.</p>
+            <p><strong>print("Product Name:", product_name)</strong>: Prints the product name.</p>
+            <p><strong>print("Product Price:", product_price)</strong>: Prints the product price, followed by a newline for readability.</p>
+            <p><strong>else</strong>: If the server did not return a 200 status code, this statement executes, printing the status code and indicating failure to retrieve the page.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById("code").textContent;
+            navigator.clipboard.writeText(codeElement).then(() => {
+                alert("Code copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
