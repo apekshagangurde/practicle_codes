@@ -3,50 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IR1 Code Example</title>
+    <title>IR1: Text Preprocessing Code with Explanation</title>
     <link rel="stylesheet" href="ir1.css">
 </head>
 <body>
     <div class="container">
-        <h1>IR1: Product Information Scraper Code</h1>
+        <h1>IR1: Text Preprocessing Code with Explanation</h1>
         
         <div class="code-container">
             <pre id="code">
-<span class="keyword">import</span> requests
-<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup
+<span class="keyword">import</span> nltk
+<span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> stopwords
+<span class="keyword">from</span> nltk.stem <span class="keyword">import</span> PorterStemmer
+<span class="keyword">from</span> nltk.tokenize <span class="keyword">import</span> word_tokenize, sent_tokenize
 
-<span class="comment"># Define the URL of the specific test site (E-commerce site)</span>
-url = <span class="string">"https://webscraper.io/test-sites/e-commerce/static/computers"</span>
+<span class="keyword"># Sample random text (100 words)</span>
+random_text = """
+Data processing encompasses a series of operations that convert raw data into structured
+and organized information. This process begins with data collection, where data is gathered
+from various sources such as sensors, databases, forms, or external systems. Once collected,
+the data can be in various formats, including text, numbers, images, or multimedia.
+The next step in data processing is data cleaning and validation. This involves identifying
+and correcting errors, inconsistencies, and missing values in the data. Clean and accurate data
+is essential for reliable analysis and decision-making. Data cleaning often involves techniques
+like outlier detection and data imputation.
+After data cleaning, data transformation is performed. This includes tasks like data normalization,
+aggregation, and summarization. Normalization ensures that data is on a consistent scale, while
+aggregation and summarization reduce data complexity by generating statistics or aggregating data into meaningful groups.
+Data processing also includes data integration, where data from multiple sources is combined
+into a unified dataset. Integration can be challenging due to differences in data structures and
+formats. Techniques like data mapping and data warehousing are used to facilitate integration.
+"""
 
-<span class="comment"># Send a GET request to the URL</span>
-response = requests.get(url)
+<span class="comment"># Tokenize the text into words</span>
+words = word_tokenize(random_text)
 
-<span class="comment"># Check if the request was successful (status code 200)</span>
-<span class="keyword">if</span> response.status_code == <span class="number">200</span>:
-    <span class="comment"># Parse the HTML content of the page using BeautifulSoup</span>
-    soup = BeautifulSoup(response.text, <span class="string">'html.parser'</span>)
+<span class="comment"># Initialize the NLTK Porter Stemmer</span>
+stemmer = PorterStemmer()
 
-    <span class="comment"># Find all product divs</span>
-    product_divs = soup.find_all(<span class="string">'div'</span>, class_=<span class="string">'col-sm-4 col-lg-4 col-md-4'</span>)
+<span class="comment"># Get the English stop words</span>
+nltk.download('stopwords')
+stop_words = set(stopwords.words(<span class="string">"english"</span>))
 
-    <span class="comment"># Loop through each product div and extract product information</span>
-    <span class="keyword">for</span> product_div <span class="keyword">in</span> product_divs:
-        <span class="comment"># Extract product name</span>
-        product_name = product_div.find(<span class="string">'a'</span>, class_=<span class="string">'card thumbnail'</span>).text.strip()
+<span class="comment"># Initialize a list to store the preprocessed words</span>
+preprocessed_words = []
 
-        <span class="comment"># Extract product price</span>
-        product_price = product_div.find(<span class="string">'h4'</span>, class_=<span class="string">'pull-right'</span>).text.strip()
+<span class="comment"># Perform text preprocessing</span>
+<span class="keyword">for</span> word <span class="keyword">in</span> words:
+    <span class="comment"># Remove punctuation and convert to lowercase</span>
+    word = word.lower()
+    word = word.strip(<span class="string">'.,?!-()[]{}"'</span>)
 
-        <span class="comment"># Print or save the extracted data</span>
-        print(<span class="string">"Product Name:"</span>, product_name)
-        print(<span class="string">"Product Price:"</span>, product_price)
-        print(<span class="string">"\n"</span>)
-<span class="keyword">else</span>:
-    print(<span class="string">"Failed to retrieve the page. Status code:"</span>, response.status_code)
+    <span class="keyword"># Check if the word is not a stop word</span>
+    <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> stop_words:
+        <span class="comment"># Stem the word</span>
+        word = stemmer.stem(word)
+
+        <span class="comment"># Add the preprocessed word to the list</span>
+        preprocessed_words.append(word)
+
+<span class="comment"># Join the preprocessed words back into a text</span>
+preprocessed_text = <span class="string">" "</span>.join(preprocessed_words)
+
+<span class="comment"># Print the original text and preprocessed text</span>
+print(<span class="string">"Original Text:"</span>)
+print(random_text)
+print(<span class="string">"\nPreprocessed Text:"</span>)
+print(preprocessed_text)
             </pre>
         </div>
         
         <button onclick="copyCode()">Copy Code</button>
+
+        <h2>Explanation of the Code:</h2>
+        <div class="explanation">
+            <p><strong>import nltk</strong>: Imports the NLTK library, which is essential for natural language processing tasks.</p>
+            <p><strong>from nltk.corpus import stopwords</strong>: Imports the list of stopwords, which are common words that are typically removed in text processing.</p>
+            <p><strong>from nltk.stem import PorterStemmer</strong>: Imports the Porter Stemmer algorithm for stemming words, which reduces words to their root form.</p>
+            <p><strong>from nltk.tokenize import word_tokenize, sent_tokenize</strong>: Imports functions for tokenizing text into words and sentences.</p>
+            <p><strong>random_text = """..."""</strong>: Defines a multi-line string containing sample text for preprocessing.</p>
+            <p><strong>words = word_tokenize(random_text)</strong>: Tokenizes the sample text into individual words.</p>
+            <p><strong>stemmer = PorterStemmer()</strong>: Initializes the Porter Stemmer for stemming operations.</p>
+            <p><strong>nltk.download('stopwords')</strong>: Downloads the stopwords dataset if it's not already downloaded.</p>
+            <p><strong>stop_words = set(stopwords.words("english"))</strong>: Retrieves the English stopwords and stores them in a set for fast lookup.</p>
+            <p><strong>preprocessed_words = []</strong>: Initializes an empty list to store preprocessed words after cleaning and stemming.</p>
+            <p><strong>for word in words:</strong>: Starts a loop to iterate through each word in the tokenized list.</p>
+            <p><strong>word = word.lower()</strong>: Converts the word to lowercase to ensure uniformity.</p>
+            <p><strong>word = word.strip('.,?!-()[]{}"')</strong>: Removes punctuation from the word.</p>
+            <p><strong>if word not in stop_words:</strong>: Checks if the word is not a stop word before processing it further.</p>
+            <p><strong>word = stemmer.stem(word)</strong>: Applies stemming to the word to reduce it to its root form.</p>
+            <p><strong>preprocessed_words.append(word)</strong>: Adds the preprocessed word to the list of cleaned words.</p>
+            <p><strong>preprocessed_text = " ".join(preprocessed_words)</strong>: Joins the list of cleaned words back into a single string.</p>
+            <p><strong>print("Original Text:")</strong>: Prints a label for the original text output.</p>
+            <p><strong>print(random_text)</strong>: Outputs the original sample text.</p>
+            <p><strong>print("\nPreprocessed Text:")</strong>: Prints a label for the preprocessed text output.</p>
+            <p><strong>print(preprocessed_text)</strong>: Outputs the preprocessed text after cleaning and stemming.</p>
+        </div>
     </div>
 
     <script>

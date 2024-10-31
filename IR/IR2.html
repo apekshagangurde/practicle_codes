@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IR2: Inverted Index and Document Retrieval</title>
+    <link rel="stylesheet" href="ir2.css">
+</head>
+<body>
+    <div class="container">
+        <h1>IR2: Inverted Index and Document Retrieval</h1>
+        
+        <div class="code-container">
+            <pre id="code">
+<span class="keyword">import</span> re
+<span class="keyword">import</span> collections
+
+<span class="comment"># Sample documents</span>
+documents = {
+    1: <span class="string">"This is the first document. It contains some words."</span>,
+    2: <span class="string">"This is the second document. It also contains words."</span>,
+    3: <span class="string">"The third document is different from the first two."</span>,
+    4: <span class="string">"Inverted index is essential for document retrieval."</span>,
+}
+
+<span class="comment"># Function to preprocess and tokenize text</span>
+def preprocess(text):
+    text = text.lower()
+    tokens = re.findall(r'\w+', text)
+    <span class="keyword">return</span> tokens
+
+<span class="comment"># Create an inverted index</span>
+def build_inverted_index(documents):
+    inverted_index = collections.defaultdict(list)
+    <span class="keyword">for</span> doc_id, document <span class="keyword">in</span> documents.items():
+        tokens = preprocess(document)
+        <span class="keyword">for</span> token <span class="keyword">in</span> tokens:
+            inverted_index[token].append(doc_id)
+    <span class="keyword">return</span> inverted_index
+
+<span class="comment"># Function to perform document retrieval</span>
+def retrieve_documents(query, inverted_index):
+    query_tokens = preprocess(query)
+    result = set()
+
+    <span class="comment"># Retrieve documents containing each query token</span>
+    <span class="keyword">for</span> token <span class="keyword">in</span> query_tokens:
+        <span class="keyword">if</span> token <span class="keyword">in</span> inverted_index:
+            <span class="keyword">if</span> <span class="keyword">not</span> result:
+                result = set(inverted_index[token])
+            <span class="keyword">else</span>:
+                result = result.intersection(inverted_index[token])
+
+    <span class="keyword">return</span> result
+
+<span class="comment"># Build the inverted index</span>
+inverted_index = build_inverted_index(documents)
+
+<span class="comment"># Example queries</span>
+query1 = input(<span class="string">"Enter query: "</span>)
+
+<span class="comment"># Retrieve documents for the queries</span>
+result1 = retrieve_documents(query1, inverted_index)
+
+<span class="comment"># Display the results</span>
+print(<span class="string">"Query:"</span>, query1)
+print(<span class="string">"Matching Documents:"</span>, result1)
+            </pre>
+        </div>
+        
+        <button onclick="copyCode()">Copy Code</button>
+
+        <h2>Explanation of the Code:</h2>
+        <div class="explanation">
+            <p><strong>import re</strong>: Imports the regex library for string pattern matching.</p>
+            <p><strong>import collections</strong>: Imports the collections module for specialized container datatypes.</p>
+            <p><strong>documents = {...}</strong>: A dictionary of sample documents, each associated with a unique ID.</p>
+            <p><strong>def preprocess(text):</strong>: Defines a function to convert text to lowercase and tokenize it into words.</p>
+            <p><strong>re.findall(r'\w+', text)</strong>: Uses regex to extract words from the text, ignoring punctuation.</p>
+            <p><strong>def build_inverted_index(documents):</strong>: Defines a function to create an inverted index from the documents.</p>
+            <p><strong>inverted_index = collections.defaultdict(list)</strong>: Initializes a defaultdict to store lists of document IDs for each token.</p>
+            <p><strong>for doc_id, document in documents.items():</strong>: Iterates over each document in the documents dictionary.</p>
+            <p><strong>tokens = preprocess(document)</strong>: Calls the preprocess function to tokenize the current document.</p>
+            <p><strong>inverted_index[token].append(doc_id)</strong>: Maps each token to its corresponding document ID.</p>
+            <p><strong>def retrieve_documents(query, inverted_index):</strong>: Defines a function to retrieve document IDs matching a given query.</p>
+            <p><strong>query_tokens = preprocess(query)</strong>: Tokenizes the user query using the preprocess function.</p>
+            <p><strong>result = set()</strong>: Initializes an empty set to store matching document IDs.</p>
+            <p><strong>for token in query_tokens:</strong>: Iterates over each token in the query.</p>
+            <p><strong>if token in inverted_index:</strong>: Checks if the token exists in the inverted index.</p>
+            <p><strong>result = set(inverted_index[token])</strong>: Initializes the result set with document IDs for the first token.</p>
+            <p><strong>result = result.intersection(inverted_index[token])</strong>: Updates the result set to keep only IDs present in both sets for each subsequent token.</p>
+            <p><strong>return result</strong>: Returns the final set of document IDs matching the query.</p>
+            <p><strong>print("Query:", query1)</strong>: Outputs the user's query.</p>
+            <p><strong>print("Matching Documents:", result1)</strong>: Outputs the IDs of documents that match the query.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById("code").textContent;
+            navigator.clipboard.writeText(codeElement).then(() => {
+                alert("Code copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
