@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML5 - Car Evaluation with Random Forest</title>
+    <link rel="stylesheet" href="ml5-style.css">
+</head>
+<body>
+    <style >
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 12px 20px;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <div class="container">
+        <h1>Car Evaluation using Random Forest Classifier</h1>
+        <h2>Download the Dataset and Code</h2>
+    <a href="./datasets/car_evaluation.csv" download>
+        <button>Download car_evaluation Dataset</button>
+    </a>
+    <a href="path/to/pca_code.py" download>
+        <button>Download PCA Code</button>
+    </a>
+        <p>This example demonstrates the use of a Random Forest Classifier on the car evaluation dataset to predict car acceptability.</p>
+
+        <section class="code-section">
+            <h2>Python Code</h2>
+            <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+            <pre><code id="codeBlock">
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Load the car evaluation dataset
+data = pd.read_csv("./datasets/car_evaluation.csv")
+
+# Encoding all the string data
+data = data.apply(LabelEncoder().fit_transform)
+
+# Define the features (X) and the target variable (y)
+X = data.iloc[:, :-1]  # Features (all columns except the last one)
+y = data.iloc[:, -1]   # Target variable (last column)
+
+# Split the dataset into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Random Forest Classifier
+rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Train the classifier on the training data
+rf_classifier.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = rf_classifier.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+confusion = confusion_matrix(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+
+print(f"Accuracy: {accuracy}")
+print("\nConfusion Matrix:\n", confusion)
+print("\nClassification Report:\n", classification_rep)
+            </code></pre>
+        </section>
+
+        <section class="evaluation-section">
+            <h2>Model Evaluation</h2>
+            <p>The model’s accuracy, confusion matrix, and classification report provide insight into its performance on the test data.</p>
+        </section>
+    </div>
+
+    <script>
+        function copyCode() {
+            // Select the code text
+            const codeBlock = document.getElementById("codeBlock").innerText;
+            navigator.clipboard.writeText(codeBlock)
+                .then(() => {
+                    alert("Code copied to clipboard!");
+                })
+                .catch((err) => {
+                    alert("Failed to copy code: " + err);
+                });
+        }
+    </script>
+</body>
+</html>

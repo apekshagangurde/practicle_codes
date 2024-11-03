@@ -70,27 +70,78 @@ print(<span class="string">"PageRank values:"</span>, pagerank_values)
         </div>
     </div>
         <h2>Explanation of the Code:</h2>
-        <div class="explanation">
-            <p><strong>import numpy as np</strong>: Imports the NumPy library, which is used for numerical operations in Python, particularly for handling arrays and mathematical computations.</p>
-            <p><strong>def page_rank(graph, damping_factor=0.85, max_iterations=100, tol=1e-6)</strong>: Defines a function named <code>page_rank</code> that takes a graph represented as an adjacency matrix, a damping factor, a maximum number of iterations, and a tolerance for convergence.</p>
-            <p><strong>num_pages = len(graph)</strong>: Calculates the number of pages (nodes) in the graph by getting the length of the adjacency matrix.</p>
-            <p><strong>pagerank = np.ones(num_pages) / num_pages</strong>: Initializes the PageRank values equally for all pages by creating an array of ones and dividing by the total number of pages.</p>
-            <p><strong>for _ in range(max_iterations)</strong>: Starts a loop that will run for a maximum of <code>max_iterations</code>. This controls how many times the algorithm updates the PageRank values.</p>
-            <p><strong>new_pagerank = np.zeros(num_pages)</strong>: Creates a new array to hold the updated PageRank values for each page.</p>
-            <p><strong>for i in range(num_pages)</strong>: Loops through each page index <code>i</code>.</p>
-            <p><strong>for j in range(num_pages)</strong>: Loops through each page index <code>j</code> to check connections.</p>
-            <p><strong>if graph[j][i]</strong>: Checks if there is a link from page <code>j</code> to page <code>i</code> in the adjacency matrix.</p>
-            <p><strong>new_pagerank[i] += pagerank[j] / sum(graph[j])</strong>: Updates the new PageRank for page <code>i</code> by adding the contribution from page <code>j</code>, normalized by the total out-links from page <code>j</code>.</p>
-            <p><strong>new_pagerank = (1 - damping_factor) / num_pages + damping_factor * new_pagerank</strong>: Applies the damping factor, which represents the probability that a user continues clicking on links. This ensures that the PageRank values don't converge to zero.</p>
-            <p><strong>if np.linalg.norm(new_pagerank - pagerank) < tol</strong>: Checks if the difference between the new and old PageRank values is within the tolerance <code>tol</code>. If it is, the function returns the new PageRank values.</p>
-            <p><strong>pagerank = new_pagerank</strong>: Updates the PageRank values for the next iteration.</p>
-            <p><strong>return pagerank</strong>: After the loop, if the maximum number of iterations is reached, it returns the final PageRank values.</p>
-            <p><strong>web_graph = [...];</strong>: Defines a sample adjacency matrix representing connections between web pages. Each entry indicates whether a link exists between the pages.</p>
-            <p><strong>pagerank_values = page_rank(web_graph)</strong>: Calls the <code>page_rank</code> function with the defined graph to calculate and retrieve the PageRank values.</p>
-            <p><strong>print("PageRank values:", pagerank_values)</strong>: Outputs the calculated PageRank values to the console.</p>
-        </div>
-    </div>
+       
+   
+    <div class="container">
+        <h1>IR5: Key Ideas and Tools</h1>
+        
+        <section>
+            <h2>numpy:</h2>
+            <p><strong>numpy</strong> (imported as <code>np</code>) is a popular library in Python used for handling numbers, especially in grids (arrays) or matrices (like a spreadsheet).</p>
+            <p>For example, if you want an array of numbers all set to 1, <code>np.ones(5)</code> gives <code>[1, 1, 1, 1, 1]</code>.</p>
+            <p>In this code, numpy helps us create and update lists of numbers easily, making our calculations faster.</p>
+        </section>
 
+        <section>
+            <h2>What is PageRank?</h2>
+            <p><strong>PageRank</strong> is an algorithm to rank pages based on their links. Pages linked to by other important pages are considered more important, with this importance represented by a "rank" for each page.</p>
+        </section>
+
+        <section>
+            <h2>How PageRank Works in This Code</h2>
+            <ol>
+                <li><strong>Setting Up and Running the Code</strong></li>
+                <pre><code>import numpy as np  # Imports numpy library for managing numbers in lists</code></pre>
+                
+                <li><strong>The <code>page_rank</code> Function</strong></li>
+                <p>The function <code>page_rank(graph, damping_factor=0.85, max_iterations=100, tol=1e-6)</code> is where we calculate the ranks.</p>
+                <ul>
+                    <li><strong>graph</strong>: A list representing links between pages.</li>
+                    <li><strong>damping_factor</strong>: Probability of following links (default 85%).</li>
+                    <li><strong>max_iterations</strong>: Limits updates to prevent endless calculations.</li>
+                    <li><strong>tol</strong>: Sets how close values need to be to stop updating.</li>
+                </ul>
+                
+                <li><strong>Step 1 - Count Pages</strong></li>
+                <pre><code>num_pages = len(graph)  # Counts the pages in the graph</code></pre>
+
+                <li><strong>Step 2 - Initializing PageRank</strong></li>
+                <pre><code>pagerank = np.ones(num_pages) / num_pages  # Sets equal rank for each page</code></pre>
+
+                <li><strong>Step 3 - Updating Ranks</strong></li>
+                <p>The main logic to update PageRank values is in a loop, repeating until ranks stabilize.</p>
+                <pre><code>for _ in range(max_iterations):  # Loop through updates until stable
+    new_pagerank = np.zeros(num_pages)  # Zero rank to start each update
+    for i in range(num_pages):
+        for j in range(num_pages):
+            if graph[j][i]:
+                new_pagerank[i] += pagerank[j] / sum(graph[j])</code></pre>
+
+                <li><strong>Step 4 - Applying Damping Factor</strong></li>
+                <pre><code>new_pagerank = (1 - damping_factor) / num_pages + damping_factor * new_pagerank</code></pre>
+
+                <li><strong>Step 5 - Checking for Convergence</strong></li>
+                <pre><code>if np.linalg.norm(new_pagerank - pagerank) < tol:
+    return new_pagerank</code></pre>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Running the Example Graph</h2>
+            <p>The code below calculates the PageRank values for a given graph:</p>
+            <pre><code>web_graph = [
+    [0, 1, 1, 0],  # Page 0 has links from pages 1 and 2
+    [0, 0, 1, 0],  # Page 1 has links from page 2
+    [1, 0, 0, 1],  # Page 2 has links from pages 0 and 3
+    [0, 0, 1, 0]   # Page 3 has links from page 2
+]
+pagerank_values = page_rank(web_graph)
+print("PageRank values:", pagerank_values)</code></pre>
+            <p>This displays each page’s "importance" based on its links.</p>
+        </section>
+        
+    </div>
+</div>
     <script>
         function copyCode() {
             const codeElement = document.getElementById("code").textContent;

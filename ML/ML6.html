@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Q-Learning Code</title>
+    <link rel="stylesheet" href="styles_6.css">
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById("code");
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // Clear any current selection
+            window.getSelection().addRange(range); // Select the code
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // Deselect
+            alert("Code copied to clipboard!");
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe Q-Learning Code</h1>
+        <button class="copy-button" onclick="copyCode()">Copy Code</button>
+        <pre id="code" class="code-block">
+import numpy as np
+import random
+
+# Task a & b: Setting up the Tic-Tac-Toe environment
+class TicTacToeEnv:
+    def __init__(self):
+        self.reset()  # Initialize the environment
+
+    def reset(self):
+        """Reset the game board and state."""
+        self.board = np.zeros((3, 3), dtype=int)  # Create a 3x3 board initialized to zero
+        self.done = False  # Flag to indicate if the game is finished
+        self.current_player = 1  # 1 for 'X', -1 for 'O'
+        return tuple(self.board.flatten())  # Return the flattened board as the initial state
+
+    def available_actions(self):
+        """Return a list of available actions (empty spots on the board)."""
+        return [(i, j) for i in range(3) for j in range(3) if self.board[i, j] == 0]
+
+    def step(self, action):
+        """Take an action and return the new state, reward, and if the game is done."""
+        if self.done:
+            return tuple(self.board.flatten()), 0, True  # If the game is over, return current state
+
+        i, j = action  # Unpack action
+        self.board[i, j] = self.current_player  # Place the current player's mark on the board
+        reward = self.check_winner()  # Check if this move wins the game
+        self.done = reward != 0 or not self.available_actions()  # Check if the game is done
+        self.current_player *= -1  # Switch players
+        return tuple(self.board.flatten()), reward, self.done  # Return new state, reward, and done flag
+
+    def check_winner(self):
+        """Check if there is a winner."""
+        for i in range(3):
+            if abs(sum(self.board[i, :])) == 3 or abs(sum(self.board[:, i])) == 3:
+                return 1 * self.current_player  # Return reward for winning
+        if abs(sum(self.board.diagonal())) == 3 or abs(sum(np.fliplr(self.board).diagonal())) == 3:
+            return 1 * self.current_player  # Check diagonals for win
+        return 0  # No winner
+
+# Task c: Building the Q-learning model
+Q = {}
+
+def choose_action(state, epsilon=0.1):
+    """Choose an action based on epsilon-greedy strategy."""
+    if state not in Q:
+        Q[state] = {a: 0 for a in env.available_actions()}  # Initialize Q-values for new state
+    if random.random() < epsilon:
+        return random.choice(env.available_actions())  # Explore: choose a random action
+    else:
+        return max(Q[state], key=Q[state].get)  # Exploit: choose the best action based on Q-values
+
+def update_q(state, action, reward, next_state, alpha=0.1, gamma=0.95):
+    """Update the Q-value using the Q-learning formula."""
+    if state not in Q:
+        Q[state] = {a: 0 for a in env.available_actions()}
+    if next_state not in Q:
+        # Set Q[next_state] with a default value of 0 if no available actions
+        Q[next_state] = {a: 0 for a in env.available_actions()} or {(0, 0): 0}
+
+    # Q-learning update rule
+    max_future_q = max(Q[next_state].values()) if next_state in Q else 0  # Get max Q value for next state
+    Q[state][action] += alpha * (reward + gamma * max_future_q - Q[state][action])  # Update rule
+
+# Task d: Training the model
+env = TicTacToeEnv()
+for episode in range(10000):  # Train for a number of episodes
+    state = env.reset()  # Reset the environment
+    done = False
+    while not done:
+        action = choose_action(state)  # Select an action
+        next_state, reward, done = env.step(action)  # Take action in the environment
+        update_q(state, action, reward, next_state)  # Update the Q-values
+        state = next_state  # Move to the next state
+
+# Task e: Testing the model
+def test_model():
+    """Test the trained model."""
+    state = env.reset()  # Reset the environment
+    done = False
+    while not done:
+        action = choose_action(state, epsilon=0)  # Always exploit
+        next_state, reward, done = env.step(action)  # Take action
+        print(np.reshape(next_state, (3, 3)))  # Print the current state of the board
+        state = next_state
+        if done:
+            if reward > 0:
+                print("AI won!")
+            elif reward < 0:
+                print("AI lost!")
+            else:
+                print("It's a draw!")
+
+# Run a test
+test_model()
+        </pre>
+    </div>
+</body>
+</html>

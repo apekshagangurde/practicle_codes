@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regression Models on Uber Dataset</title>
+    <link rel="stylesheet" href="styles_2.css"> <!-- Link to external CSS -->
+</head>
+<body>
+    <style>
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 12px 20px;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <div class="container">
+
+        <h1>Regression Models on Uber Dataset</h1>
+        <h2>Download the Dataset and Code</h2>
+    <a href="./datasets/uber.csv" download>
+        <button>Download Wine Dataset</button>
+    </a>
+    <a href="./ML/regression.ipynb" download>
+        <button>Download regression code</button>
+    </a>
+        <h2>Introduction</h2>
+        <p>This presentation demonstrates how to implement various regression models (Linear Regression, Ridge Regression, and Lasso Regression) on the Uber dataset. The goal is to predict the fare amount based on several features extracted from the data.</p>
+
+        <h2>Code Implementation</h2>
+        <button class="copy-button" onclick="copyCode()">Copy Code</button>
+        <pre id="code-block"><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.impute import SimpleImputer
+
+# Load the dataset
+df = pd.read_csv("./datasets/uber.csv")
+
+# View the dataset
+print("Initial Data:")
+print(df.head())
+
+# Convert 'pickup_datetime' to datetime and extract hour and day of week
+df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+df['hour'] = df['pickup_datetime'].dt.hour
+df['day_of_week'] = df['pickup_datetime'].dt.dayofweek
+
+# Check the dataset after adding new columns
+print("\nData After Adding 'hour' and 'day_of_week':")
+print(df.head())
+
+# Drop unnecessary columns
+df = df.drop(columns=['Unnamed: 0', 'key', 'pickup_datetime'])
+
+# Check the dataset for removal of columns
+print("\nData After Dropping Unnecessary Columns:")
+print(df.head())
+
+# Handle missing values
+imputer = SimpleImputer(strategy='mean')
+df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+# Split the data into features (X) and target (y)
+X = df_imputed.drop(columns=['fare_amount'])  # Features
+y = df_imputed['fare_amount']  # Target variable
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize the features (scaling)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Implement Linear Regression
+lr_model = LinearRegression()
+lr_model.fit(X_train_scaled, y_train)
+y_pred_lr = lr_model.predict(X_test_scaled)
+
+# Implement Ridge Regression
+ridge_model = Ridge(alpha=1.0)  # You can experiment with different alpha values
+ridge_model.fit(X_train_scaled, y_train)
+y_pred_ridge = ridge_model.predict(X_test_scaled)
+
+# Implement Lasso Regression
+lasso_model = Lasso(alpha=0.1)  # You can experiment with different alpha values
+lasso_model.fit(X_train_scaled, y_train)
+y_pred_lasso = lasso_model.predict(X_test_scaled)
+
+# Evaluate the models
+def evaluate_model(y_true, y_pred, model_name):
+    r2 = r2_score(y_true, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+    print(f"{model_name} - R2 Score: {r2:.4f}, RMSE: {rmse:.2f}")
+
+print("\nModel Evaluation:")
+evaluate_model(y_test, y_pred_lr, "Linear Regression")
+evaluate_model(y_test, y_pred_ridge, "Ridge Regression")
+evaluate_model(y_test, y_pred_lasso, "Lasso Regression")</code></pre>
+        
+        <h2>Conclusion</h2>
+        <p>In this analysis, we applied multiple regression techniques to predict Uber fares using the dataset. By evaluating the models, we can compare their performance based on R² scores and RMSE values.</p>
+        
+        <h2>Questions</h2>
+        <p>Thank you for your attention! Feel free to ask any questions.</p>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeBlock = document.getElementById('code-block');
+            const range = document.createRange();
+            range.selectNode(codeBlock);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            try {
+                document.execCommand('copy');
+                alert('Code copied to clipboard!');
+            } catch (err) {
+                alert('Unable to copy code.');
+            }
+            window.getSelection().removeAllRanges();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCA on Wine Dataset</title>
+    <style>
+       /* styles.css */
+
+body {
+    font-family: 'Verdana', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #eef2f3;
+    color: #444;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 2.8em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #2c3e50;
+    font-size: 2.2em;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #2980b9;
+    font-size: 1.8em;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 12px 20px;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+pre {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+ul {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Principal Component Analysis (PCA) on Wine Dataset</h1>
+    <h2>Download the Dataset and Code</h2>
+    <a href="./datasets/wine.csv" download>
+        <button>Download Wine Dataset</button>
+    </a>
+    <a href="./ML/PCA.ipynb" download>
+        <button>Download PCA Code</button>
+    </a>
+    <h2>Full Code</h2>
+    <button onclick="copyCode()">Copy Code</button>
+    <pre id="full-code"><code>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_wine
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Load the Wine Dataset
+wine = load_wine()
+X = wine.data  # Features (measurements)
+y = wine.target  # Target variable (Type of wine)
+
+# Create a DataFrame
+df = pd.DataFrame(data=X, columns=wine.feature_names)
+df['Customer_Segment'] = y
+
+# Scatter Plot Before PCA
+plt.figure(figsize=(10, 6))
+plt.scatter(df[df['Customer_Segment'] == 0]['alcohol'], df[df['Customer_Segment'] == 0]['malic_acid'], label='Customer Segment 1', alpha=0.7)
+plt.scatter(df[df['Customer_Segment'] == 1]['alcohol'], df[df['Customer_Segment'] == 1]['malic_acid'], label='Customer Segment 2', alpha=0.7)
+plt.scatter(df[df['Customer_Segment'] == 2]['alcohol'], df[df['Customer_Segment'] == 2]['malic_acid'], label='Customer Segment 3', alpha=0.7)
+plt.xlabel('Alcohol')
+plt.ylabel('Malic Acid')
+plt.legend()
+plt.title('Scatter Plot (Original Data)')
+plt.show()
+
+# Standardize the Features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Apply PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# Create PCA DataFrame
+pca_df = pd.DataFrame(data=X_pca, columns=['Principal Component 1', 'Principal Component 2'])
+pca_df['Customer_Segment'] = y
+
+# Scatter Plot After PCA
+plt.figure(figsize=(10, 6))
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 0]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 0]['Principal Component 2'], label='Customer Segment 1', alpha=0.7)
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 1]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 1]['Principal Component 2'], label='Customer Segment 2', alpha=0.7)
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 2]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 2]['Principal Component 2'], label='Customer Segment 3', alpha=0.7)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.legend()
+plt.title('PCA: Wine Dataset')
+plt.show()
+    </code></pre>
+    
+    <h2>Introduction</h2>
+    <p>This presentation demonstrates how to perform Principal Component Analysis (PCA) on the Wine dataset. PCA is a dimensionality reduction technique that simplifies datasets by transforming them into a smaller number of dimensions while retaining as much variance as possible.</p>
+    
+    <h2>Theoretical Concepts</h2>
+    <ul>
+        <li><strong>Dimensionality Reduction:</strong> Reduces the complexity of datasets with many features.</li>
+        <li><strong>Principal Component Analysis (PCA):</strong> Identifies directions in which data varies the most.</li>
+        <li><strong>Standardization:</strong> Ensures that all features contribute equally to the PCA analysis.</li>
+        <li><strong>Explained Variance:</strong> Provides information on how much variance is captured by each principal component.</li>
+    </ul>
+    
+    <h2>Step-by-Step Implementation</h2>
+    
+    <h3>1. Import Libraries</h3>
+    <pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_wine
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA</code></pre>
+    
+    <h3>2. Load the Wine Dataset</h3>
+    <pre><code>wine = load_wine()
+X = wine.data  # Features (measurements)
+y = wine.target  # Target variable (Type of wine)</code></pre>
+    
+    <h3>3. Create a DataFrame</h3>
+    <pre><code>df = pd.DataFrame(data=X, columns=wine.feature_names)
+df['Customer_Segment'] = y</code></pre>
+    
+    <h3>4. Scatter Plot Before PCA</h3>
+    <pre><code>plt.figure(figsize=(10, 6))
+plt.scatter(df[df['Customer_Segment'] == 0]['alcohol'], df[df['Customer_Segment'] == 0]['malic_acid'], label='Customer Segment 1', alpha=0.7)
+plt.scatter(df[df['Customer_Segment'] == 1]['alcohol'], df[df['Customer_Segment'] == 1]['malic_acid'], label='Customer Segment 2', alpha=0.7)
+plt.scatter(df[df['Customer_Segment'] == 2]['alcohol'], df[df['Customer_Segment'] == 2]['malic_acid'], label='Customer Segment 3', alpha=0.7)
+plt.xlabel('Alcohol')
+plt.ylabel('Malic Acid')
+plt.legend()
+plt.title('Scatter Plot (Original Data)')
+plt.show()</code></pre>
+    
+    <h3>5. Standardize the Features</h3>
+    <pre><code>scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)</code></pre>
+    
+    <h3>6. Apply PCA</h3>
+    <pre><code>pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)</code></pre>
+    
+    <h3>7. Create PCA DataFrame</h3>
+    <pre><code>pca_df = pd.DataFrame(data=X_pca, columns=['Principal Component 1', 'Principal Component 2'])
+pca_df['Customer_Segment'] = y</code></pre>
+    
+    <h3>8. Scatter Plot After PCA</h3>
+    <pre><code>plt.figure(figsize=(10, 6))
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 0]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 0]['Principal Component 2'], label='Customer Segment 1', alpha=0.7)
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 1]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 1]['Principal Component 2'], label='Customer Segment 2', alpha=0.7)
+plt.scatter(pca_df[pca_df['Customer_Segment'] == 2]['Principal Component 1'], pca_df[pca_df['Customer_Segment'] == 2]['Principal Component 2'], label='Customer Segment 3', alpha=0.7)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.legend()
+plt.title('PCA: Wine Dataset')
+plt.show()</code></pre>
+    
+    <h2>Conclusion</h2>
+    <p>In this analysis, we applied PCA to the Wine dataset to reduce its dimensionality from 13 features to 2 principal components, facilitating better visualization and analysis.</p>
+    
+    <h2>Questions</h2>
+    <p>Thank you for your attention! Feel free to ask any questions.</p>
+
+    <script>
+        function copyCode() {
+            const code = document.getElementById("full-code").innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Code copied to clipboard!");
+            }, () => {
+                alert("Failed to copy code.");
+            });
+        }
+    </script>
+</body>
+</html>

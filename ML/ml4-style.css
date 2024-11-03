@@ -1,0 +1,83 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.code-section, .plot-section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.copy-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.copy-btn:hover {
+    background-color: #45a049;
+}
+
+pre {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+code {
+    color: #d63384;
+}
+
+.plot-section p {
+    margin-bottom: 10px;
+}
+
+.plot-image {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.plot-section p {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}

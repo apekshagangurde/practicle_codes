@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+}
+
+.copy-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 20px auto;
+    transition: background-color 0.3s;
+}
+
+.copy-button:hover {
+    background-color: #45a049;
+}
+
+.code-block {
+    background-color: #272c34;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap; /* Allows wrapping for long lines */
+}
