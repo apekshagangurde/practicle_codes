@@ -76,6 +76,83 @@ plt.ylabel('Inertia (Within-cluster Sum of Squares)')
 plt.title('Elbow Method for Optimal Number of Clusters')
 plt.grid()
 plt.show()
+
+'''K-Means is a popular clustering algorithm used
+to partition data into K distinct clusters based on feature similarity.
+
+ Here are the steps involved:
+
+1. Choose the Number of Clusters (K):
+
+ by using methods like the elbow method.
+
+2. Initialize Centroids:
+
+Randomly select K data points from the dataset as initial centroids (the center of each cluster).
+
+
+3. Assign Clusters:
+
+For each data point, calculate the distance to each centroid (using Euclidean distance is common) and assign the data point to the cluster with the nearest centroid.
+
+4. Update Centroids:
+
+Recalculate the centroids by taking the mean of all data points assigned to each cluster.
+
+5. Repeat:
+
+Repeat steps 3 and 4 until convergence is reached 
+
+
+
+6. Final Output:
+
+Once the algorithm has converged, the final clusters and centroids are returned.
+
+
+
+
+Elbow Method:
+
+The elbow method is a heuristic used to determine the optimal number of clusters (K) for K-Means clustering. Here's how it works:
+
+1. Calculate K-Means for a Range of K Values:
+
+Run the K-Means algorithm for a range of K values (e.g., from 1 to 10).
+
+
+
+2. Calculate the Sum of Squared Errors (SSE):
+
+For each value of K, calculate the sum of squared distances (errors) between each data point and its assigned centroid. This is also known as the within-cluster sum of squares (WCSS).
+
+
+
+3. Plot the Elbow Curve:
+
+Create a plot of the SSE against the number of clusters (K).
+
+
+
+4. Identify the Elbow Point:
+
+The plot will typically show a decrease in SSE as K increases. The point at which the decrease in SSE starts to slow down significantly (forming an "elbow" shape) indicates the optimal number of clusters. This is where adding more clusters provides diminishing returns on the reduction of SSE.
+
+
+
+
+
+---
+
+Summary:
+
+K-Means is a simple yet effective clustering algorithm that involves initializing centroids, assigning clusters, updating centroids, and repeating until convergence.
+
+The elbow method helps determine the appropriate number of clusters by plotting the SSE and looking for an elbow point where adding more clusters yields less improvement in SSE.
+
+
+Using these methods, you can effectively cluster data and choose the number of clusters that best represents the underlying structure of the data.'''
+
             </code></pre>
         </section>
 
