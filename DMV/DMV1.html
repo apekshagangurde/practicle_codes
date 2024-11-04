@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download Dataset and Code</h1>
+        <a href="./datasets/customer.zip" class="button" download>Download Dataset (customer dataset</a>
+        <a href="./7_different_types_of_data.ipynb" class="button" download>Download diffrent type of dataset code</a>
+        <h1>Download Dataset and Code</h1>
+        <a href="./datasets/sales.zip" class="button" download>Download Dataset(sales)</a>
+        <a href="./Practical 1.ipynb" class="button" download>Download Code(sales)</a>
+    </div>
+</body>
+</html>
