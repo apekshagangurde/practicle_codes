@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data Visualization Code</title>
+    <style>
+        
+     
+     body {
+         font-family: 'Verdana', sans-serif;
+         margin: 0;
+         padding: 20px;
+         background-color: #eef2f3;
+         color: #444;
+     }
+     
+     h1 {
+         color: #2c3e50;
+         font-size: 2.8em;
+         text-align: center;
+         margin-bottom: 30px;
+     }
+     
+     h2 {
+         color: #2c3e50;
+         font-size: 2.2em;
+         margin-top: 30px;
+         margin-bottom: 10px;
+     }
+     
+     h3 {
+         color: #2980b9;
+         font-size: 1.8em;
+         margin-top: 20px;
+         margin-bottom: 10px;
+     }
+     
+     p {
+         line-height: 1.7;
+         margin-bottom: 20px;
+     }
+     
+     button {
+         background-color: #3498db;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 1em;
+         padding: 12px 20px;
+         transition: background-color 0.3s;
+         display: block;
+         margin: 20px auto;
+     }
+     
+     button:hover {
+         background-color: #2980b9;
+     }
+     
+     .card {
+         background-color: #ffffff;
+         border-radius: 10px;
+         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+         padding: 20px;
+         margin: 20px 0;
+     }
+     
+     code {
+         font-family: 'Courier New', monospace;
+         background-color: #f8f9fa;
+         padding: 4px 8px;
+         border-radius: 4px;
+     }
+     
+     pre {
+         background-color: #f9f9f9;
+         padding: 15px;
+         border-radius: 5px;
+         border: 1px solid #ddd;
+         overflow-x: auto;
+         margin: 10px 0;
+     }
+     
+     ul {
+         margin-top: 10px;
+         margin-bottom: 10px;
+         padding-left: 20px;
+     }
+     
+     li {
+         margin-bottom: 10px;
+     }
+     
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+   
+        
+    </style>
+</head>
+<body>
+    <h1>Weather Data Visualization Code</h1>
+    
+    <h2>Code 1: Weather Forecast with Temperature and Humidity</h2>
+    <button onclick="copyCode('code1')">Copy Code</button>
+    <pre id="code1">
+import requests
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+# Enter your API key here
+api_key = "df837aa630d5e466aa4bf2e60f385116"
+
+# base_url variable to store the API URL
+base_url = "http://api.openweathermap.org/data/2.5/forecast?"
+
+# Get city name from the user
+city_name = input("Enter city name: ")
+
+# Complete URL to fetch the 5-day weather forecast
+complete_url = base_url + "q=" + city_name + "&appid=" + api_key
+
+# Send an API request to retrieve the 5-day forecast
+response = requests.get(complete_url)
+
+# Check if the request was successful (status code 200)
+if response.status_code == 200:
+    # Parse the JSON response
+    data = response.json()
+
+    # Extract temperature and humidity data from the forecast
+    temperatures = [item['main']['temp'] for item in data['list']]
+    humidities = [item['main']['humidity'] for item in data['list']]
+   
+    # Create a DataFrame to store the data
+    weather_data = pd.DataFrame({'Temperature (Kelvin)': temperatures, 'Humidity (%)': humidities})
+
+    # Calculate average, maximum, and minimum temperature and humidity
+    average_temperature = sum(temperatures) / len(temperatures)
+    max_temperature = max(temperatures)
+    min_temperature = min(temperatures)
+    average_humidity = sum(humidities) / len(humidities)
+    max_humidity = max(humidities)
+    min_humidity = min(humidities)
+
+    # Print weather statistics
+    print("Average Temperature: {:.2f} Kelvin".format(average_temperature))
+    print("Maximum Temperature: {:.2f} Kelvin".format(max_temperature))
+    print("Minimum Temperature: {:.2f} Kelvin".format(min_temperature))
+    print("Average Humidity: {:.2f}%".format(average_humidity))
+    print("Maximum Humidity: {:.2f}%".format(max_humidity))
+    print("Minimum Humidity: {:.2f}%".format(min_humidity))
+
+    # Plot temperature
+    plt.figure(figsize=(12, 6))
+    plt.subplot(2, 1, 1)
+    plt.plot(weather_data['Temperature (Kelvin)'], label='Temperature (Kelvin)', color='red')
+    plt.xlabel('Time (3-hour intervals)')
+    plt.ylabel('Temperature (Kelvin)')
+    plt.title('Temperature Forecast')
+    plt.grid()
+
+    # Plot humidity
+    plt.subplot(2, 1, 2)
+    plt.plot(weather_data['Humidity (%)'], label='Humidity (%)', color='blue')
+    plt.xlabel('Time (3-hour intervals)')
+    plt.ylabel('Humidity (%)')
+    plt.title('Humidity Forecast')
+    plt.grid()
+
+    plt.tight_layout()
+
+    # Create a correlation heatmap
+    correlation_matrix = weather_data.corr()
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+    plt.title('Correlation Heatmap')
+
+    plt.show()
+
+else:
+    print("City Not Found or API Request Failed")
+    </pre>
+
+    <h2>Code 2: Weather Forecast with Additional Parameters</h2>
+    <button onclick="copyCode('code2')">Copy Code</button>
+    <pre id="code2">
+import requests
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+# Enter your API key here
+api_key = "df837aa630d5e466aa4bf2e60f385116"
+
+# Base URL for the API
+base_url = "http://api.openweathermap.org/data/2.5/forecast?"
+
+# Get city name from the user
+city_name = input("Enter city name: ")
+
+# Complete URL to fetch the 5-day weather forecast
+complete_url = f"{base_url}q={city_name}&appid={api_key}&units=metric"  # Using metric for Celsius
+
+# Send an API request to retrieve the 5-day forecast
+response = requests.get(complete_url)
+
+# Check if the request was successful (status code 200)
+if response.status_code == 200:
+    # Parse the JSON response
+    data = response.json()
+
+    # Extract relevant weather attributes from the forecast
+    temperatures = [item['main']['temp'] for item in data['list']]
+    humidities = [item['main']['humidity'] for item in data['list']]
+    wind_speeds = [item['wind']['speed'] for item in data['list']]
+    precipitation = [item.get('rain', {}).get('1h', 0) for item in data['list']]  # Get 1-hour rain, default to 0
+
+    # Create a DataFrame to store the data
+    weather_data = pd.DataFrame({
+        'Temperature (°C)': temperatures,
+        'Humidity (%)': humidities,
+        'Wind Speed (m/s)': wind_speeds,
+        'Precipitation (mm)': precipitation
+    })
+
+    # Handle missing values (if any)
+    weather_data.fillna(0, inplace=True)  # Replace NaNs with 0
+
+    # Perform data modeling to analyze weather patterns
+    average_temperature = weather_data['Temperature (°C)'].mean()
+    max_temperature = weather_data['Temperature (°C)'].max()
+    min_temperature = weather_data['Temperature (°C)'].min()
+    average_humidity = weather_data['Humidity (%)'].mean()
+    max_humidity = weather_data['Humidity (%)'].max()
+    min_humidity = weather_data['Humidity (%)'].min()
+    total_precipitation = weather_data['Precipitation (mm)'].sum()
+
+    # Print weather statistics
+    print(f"Average Temperature: {average_temperature:.2f} °C")
+    print(f"Maximum Temperature: {max_temperature:.2f} °C")
+    print(f"Minimum Temperature: {min_temperature:.2f} °C")
+    print(f"Average Humidity: {average_humidity:.2f}%")
+    print(f"Maximum Humidity: {max_humidity:.2f}%")
+    print(f"Minimum Humidity: {min_humidity:.2f}%")
+    print(f"Total Precipitation: {total_precipitation:.2f} mm")
+
+    # Time intervals (x-axis)
+    time_intervals = pd.date_range(start=data['list'][0]['dt_txt'], periods=len(temperatures), freq='3H')
+
+    # Adding time intervals to the DataFrame
+    weather_data['Time'] = time_intervals
+
+    # Visualize the weather data
+    plt.figure(figsize=(12, 10))
+
+    # Plot temperature
+    plt.subplot(3, 1, 1)
+    plt.plot(weather_data['Time'], weather_data['Temperature (°C)'], label='Temperature (°C)', color='red')
+    plt.xlabel('Time')
+    plt.ylabel('Temperature (°C)')
+    plt.title('Temperature Forecast')
+    plt.xticks(rotation=45)
+    plt.grid()
+
+    # Plot humidity
+    plt.subplot(3, 1, 2)
+    plt.plot(weather_data['Time'], weather_data['Humidity (%)'], label='Humidity (%)', color='blue')
+    plt.xlabel('Time')
+    plt.ylabel('Humidity (%)')
+    plt.title('Humidity Forecast')
+    plt.xticks(rotation=45)
+    plt.grid()
+
+    # Plot wind speed
+    plt.subplot(3, 1, 3)
+    plt.plot(weather_data['Time'], weather_data['Wind Speed (m/s)'], label='Wind Speed (m/s)', color='green')
+    plt.xlabel('Time')
+    plt.ylabel('Wind Speed (m/s)')
+    plt.title('Wind Speed Forecast')
+    plt.xticks(rotation=45)
+    plt.grid()
+
+    plt.tight_layout()
+    plt.show()
+
+    # Create a correlation heatmap
+    correlation_matrix = weather_data[['Temperature (°C)', 'Humidity (%)', 'Wind Speed (m/s)', 'Precipitation (mm)']].corr()
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+    plt.title('Correlation Heatmap')
+
+    plt.show()
+else:
+    print("City Not Found or API Request Failed")
+    </pre>
+    <h1>Download Dataset and Code</h1>
+    
+    <a href="./8_OpenWeatherMap.ipynb" class="button" download>8_OpenWeatherMap</a>
+    <a href="./8_Open_weather_API.ipynb" class="button" download>8_Open_weather_API</a>
+    <a href="./8_Practical 2.ipynb" class="button" download>8_Practical 2.ipynb</a>
+    <script>
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const code = codeElement.innerText;
+
+            navigator.clipboard.writeText(code)
+                .then(() => alert("Code copied to clipboard!"))
+                .catch(err => alert("Failed to copy code: " + err));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Aggregation Code Display</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .code-section { margin-bottom: 40px; }
+    .code-title { font-size: 1.2em; font-weight: bold; }
+    .code-container { background-color: #f4f4f4; padding: 15px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap; }
+    .button-container { margin-top: 10px; }
+    button { padding: 10px 15px; margin-right: 10px; cursor: pointer; border: none; border-radius: 5px; }
+    .copy-btn { background-color: #4CAF50; color: white; }
+    .download-btn { background-color: #2196F3; color: white; }
+    .dataset-btn { background-color: #FF5722; color: white; }
+  </style>
+</head>
+<body>
+
+<h1>Data Aggregation Code Examples</h1>
+
+<!-- Code Section 1 -->
+<div class="code-section">
+  <div class="button-container">
+      <button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+      <button class="download-btn" onclick="downloadCode('code1', '12_data_aggregation.py')">Download Code</button>
+      <button class="dataset-btn" onclick="downloadDataset('./datasets/Retail_Sales_Data.csv')">Download Dataset</button>
+  </div>
+  <div class="code-title">Code 1</div>
+  <div id="code1" class="code-container">
+    <pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load the data from CSV
+data = pd.read_csv("Retail_Sales_Data.csv")
+
+# Explore the structure and content of the data
+print("First five rows of the dataset:")
+print(data.head())
+
+print("\nData information:")
+print(data.info())
+print("\nData description:")
+print(data.describe())
+print("\nColumn names:")
+print(data.columns)
+print("\nMissing values in each column:")
+print(data.isnull().sum())
+
+# Select the relevant columns for aggregation
+# 'State' - region, 'Sales' - sales amount, 'Shop_Category' - product category
+relevant_columns = data[['State', 'Sales', 'Shop_Category']]
+
+# Calculate total sales for each region
+region_sales = data.groupby('State')['Sales'].sum()
+print("\nTotal sales by region:")
+print(region_sales)
+
+# Create a bar plot for total sales by region
+plt.figure(figsize=(10, 6))
+plt.bar(region_sales.index, region_sales.values)
+plt.xlabel('Region')
+plt.ylabel('Total Sales Amount')
+plt.title('Sales Distribution by Region')
+plt.xticks(rotation=45)  # Rotate labels for readability
+plt.show()
+
+# Create a pie chart for sales distribution by region
+plt.figure(figsize=(8, 8))
+plt.pie(region_sales.values, labels=region_sales.index, autopct='%1.1f%%', startangle=140)
+plt.axis('equal')
+plt.title('Sales Distribution by Region')
+plt.show()
+
+# Sort the data by 'Sales' in descending order and get the top-performing region
+top_regions = data.sort_values(by='Sales', ascending=False)
+top_region = top_regions.iloc[0]
+print("\nTop-Performing Region:")
+print("State:", top_region['State'], "- Sales:", top_region['Sales'])
+
+# Calculate total sales for each combination of region and product category
+region_category_sales = data.groupby(['State', 'Shop_Category'])['Sales'].sum()
+print("\nTotal sales by region and product category:")
+print(region_category_sales)
+
+# Pivot the data for a stacked bar plot
+pivot_df = region_category_sales.unstack(level='Shop_Category')
+
+# Create a stacked bar plot for sales by region and product category
+fig, ax = plt.subplots(figsize=(10, 6))
+pivot_df.plot(kind='bar', stacked=True, ax=ax)
+plt.xlabel('Region')
+plt.ylabel('Total Sales Amount')
+plt.title('Sales Amount by Region and Product Category (Stacked Bar Plot)')
+plt.xticks(rotation=45)
+plt.legend(title='Product Category')
+plt.show()
+
+# Create a grouped bar plot for sales by region and product category
+fig, ax = plt.subplots(figsize=(12, 8))
+pivot_df.plot(kind='bar', ax=ax)
+plt.xlabel('Region')
+plt.ylabel('Total Sales Amount')
+plt.title('Sales Amount by Region and Product Category (Grouped Bar Plot)')
+plt.xticks(rotation=45)
+plt.legend(title='Product Category')
+plt.show()
+    </pre>
+  </div>
+</div>
+
+<!-- Code Section 2 -->
+<div class="code-section">
+  <div class="button-container">
+      <button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+      <button class="download-btn" onclick="downloadCode('code2', 'Practical_6.py')">Download Code</button>
+      <button class="dataset-btn" onclick="downloadDataset('./datasets/customer_shopping_data.csv')">Download Dataset</button>
+  </div>
+  <div class="code-title">Code 2</div>
+  <div id="code2" class="code-container">
+    <pre>
+# Importing necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Loading data from a CSV file
+df = pd.read_csv("./datasets/customer_shopping_data.csv")
+
+# Displaying the first few rows of the dataset
+print("First five rows of the dataset:")
+print(df.head())
+
+# Displaying the last few rows of the dataset
+print("\nLast five rows of the dataset:")
+print(df.tail())
+
+# To check the count of records grouped by region/branch of the mall
+mall_count = df.groupby("shopping_mall").count()
+print("\nCount of records grouped by shopping mall:")
+print(mall_count)
+
+# To check the count of records grouped by the product categories
+category_count = df.groupby("category").count()
+print("\nCount of records grouped by product category:")
+print(category_count)
+
+# Total sales for each mall branch
+branch_sales = df.groupby("shopping_mall").sum()
+print("\nTotal sales for each mall branch:")
+print(branch_sales)
+
+# Total sales for each category of product
+category_sales = df.groupby("category").sum()
+print("\nTotal sales for each product category:")
+print(category_sales)
+
+# To get the top-performing branches by sales
+top_branches = branch_sales.sort_values(by="price", ascending=False)
+print("\nTop-performing branches by total sales:")
+print(top_branches)
+
+# To get the top-selling product categories
+top_categories = category_sales.sort_values(by="price", ascending=False)
+print("\nTop-selling product categories:")
+print(top_categories)
+
+# To get total sales for each combination of branch and product category
+combined_branch_category_sales = df.groupby(["shopping_mall", "category"]).sum()
+print("\nTotal sales for each combination of branch and product category:")
+print(combined_branch_category_sales)
+
+# Pie chart for sales by branch
+plt.figure(figsize=(8, 8))
+plt.pie(branch_sales["price"], labels=branch_sales.index, autopct='%1.1f%%')
+plt.title("Sales Distribution by Branch")
+plt.show()
+
+# Pie chart for sales by product category
+plt.figure(figsize=(8, 8))
+plt.pie(category_sales["price"], labels=category_sales.index, autopct='%1.1f%%')
+plt.title("Sales Distribution by Product Category")
+plt.show()
+
+# Creating a pivot table for branch-category sales data
+combined_pivot = df.pivot_table(index="shopping_mall", columns="category", values="price", aggfunc="sum")
+print("\nPivot table for branch-category sales data:")
+print(combined_pivot)
+
+# Grouped bar chart for sales of different categories at different branches
+combined_pivot.plot(kind="bar", figsize=(12, 8), title="Sales of Different Categories at Different Branches")
+plt.xlabel("Shopping Mall")
+plt.ylabel("Total Sales (Price)")
+plt.legend(title="Product Category")
+plt.show()
+    </pre>
+  </div>
+</div>
+
+<script>
+  // Function to copy code to clipboard
+  function copyCode(elementId) {
+    const codeElement = document.getElementById(elementId);
+    const codeText = codeElement.innerText;
+    navigator.clipboard.writeText(codeText).then(() => {
+      alert("Code copied to clipboard!");
+    });
+  }
+
+  // Function to download code as a .py file
+  function downloadCode(elementId, filename) {
+    const codeElement = document.getElementById(elementId);
+    const codeText = codeElement.innerText.replace(/<br>/g, "\n");
+    const blob = new Blob([codeText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Function to download dataset file
+  function downloadDataset(filename) {
+    const a = document.createElement("a");
+    a.href = filename;
+    a.download = filename;
+    a.click();
+  }
+</script>
+
+</body>
+</html>

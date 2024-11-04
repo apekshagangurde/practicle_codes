@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Cleaning and Preparation Codes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 12px 20px;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        .code-block {
+            background-color: #f4f4f4;
+            padding: 1em;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+        }
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+        pre {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>Download the Dataset and Code</h2>
+    <a href="./datasets/telecom_customer_churn1.csv" download>
+        <button>Download Wine Dataset</button>
+    </a>
+    <a href="./9_PreProcessing.ipynb" download>
+        <button>Download PCA Code</button>
+    </a>
+    <a href="./datasets/Telcom_Customer_Churn.csv" download>
+        <button>Download Wine Dataset</button>
+    </a>
+    <a href="./9_Practical 3.ipynb" download>
+        <button>Download PCA Code</button>
+    </a>
+    <h1>Data Cleaning and Preparation Code Options</h1>
+    
+    <h2>Code 1</h2>
+    <div class="code-block" id="code1">
+        <button class="copy-btn" onclick="copyCode('code1-text')">Copy Code</button>
+        <pre id="code1-text">
+# Importing necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split 
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the dataset
+data = pd.read_csv("./datasets/Telcom_Customer_Churn.csv")
+
+# Basic Data Exploration
+print("Dataset Index Range:", data.index)
+print("\nFirst 5 Rows of Data:\n", data.head())
+print("\nColumns in the Dataset:\n", data.columns)
+print("\nShape of Dataset (rows, columns):", data.shape)
+print("\nUnique Values in Each Column:\n", data.nunique())
+print("\nMissing Values in Each Column (NaN):\n", data.isna().sum())
+print("\nMissing Values in Each Column (null):\n", data.isnull().sum())
+
+# Check the number of rows before removing duplicates
+print("Number of rows before removing duplicates:", len(data))
+
+# Remove duplicate records
+data_cleaned = data.drop_duplicates()
+print("Number of rows after removing duplicates:", len(data_cleaned))
+
+# Descriptive Statistics
+print("\nData Description:\n", data_cleaned.describe())
+
+# Frequency Distribution for Key Columns
+print("\nFrequency Distribution of Tenure:\n")
+unique_tenure, counts_tenure = np.unique(data_cleaned['tenure'], return_counts=True) 
+print("Unique Values:", unique_tenure)
+print("Counts:", counts_tenure)
+
+print("\nFrequency Distribution of Monthly Charges:\n")
+unique_monthly, counts_monthly = np.unique(data_cleaned['MonthlyCharges'], return_counts=True) 
+print("Unique Values:", unique_monthly)
+print("Counts:", counts_monthly)
+
+print("\nFrequency Distribution of Total Charges:\n")
+unique_total, counts_total = np.unique(data_cleaned['TotalCharges'], return_counts=True) 
+print("Unique Values:", unique_total)
+print("Counts:", counts_total)
+
+# Data Visualization with Pair Plot and Box Plots
+sns.pairplot(data_cleaned)
+plt.show()
+
+# Box plot for 'tenure' and 'MonthlyCharges'
+plt.boxplot(data_cleaned['tenure'])
+plt.title('Box Plot of Tenure')
+plt.show()
+
+plt.boxplot(data_cleaned['MonthlyCharges'])
+plt.title('Box Plot of Monthly Charges')
+plt.show()
+
+# Preparing Data for Model Training
+X = data_cleaned.drop("Churn", axis=1) 
+y = data_cleaned["Churn"]
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Display shapes of training and testing sets
+print("\nTraining set shape (X_train, y_train):", X_train.shape, y_train.shape)
+print("Testing set shape (X_test, y_test):", X_test.shape, y_test.shape)
+
+# Export the cleaned dataset to a new CSV file
+data_cleaned.to_csv("./datasets/Cleaned_Telecom_Customer_Churn.csv", index=False)
+print("\nCleaned dataset has been saved as 'Cleaned_Telecom_Customer_Churn.csv'.")
+        </pre>
+    </div>
+
+    <h2>Code 2</h2>
+    <div class="code-block" id="code2">
+        <button class="copy-btn" onclick="copyCode('code2-text')">Copy Code</button>
+        <pre id="code2-text">
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load the dataset
+df = pd.read_csv("telecom_customer_churn.csv")
+
+# View the first few rows and get dataset info
+print("First 5 Rows of Data:\n", df.head())
+print("\nDataset Information:\n", df.info())
+print("\nDescriptive Statistics:\n", df.describe())
+
+# Handle missing values by filling NaNs with 0
+df.fillna(0, inplace=True)
+
+# Remove duplicate rows
+df.drop_duplicates(inplace=True)
+
+# Standardize 'Gender' column to lowercase
+df['Gender'] = df['Gender'].str.lower()
+
+# Convert 'Total Charges' to numeric, with invalid parsing set as NaN (then filled with 0 above)
+df['TotalCharges'] = pd.to_numeric(df['Total Charges'], errors='coerce')
+
+# Remove outliers from 'TotalCharges' using Z-score method
+z_scores = (df['TotalCharges'] - df['TotalCharges'].mean()) / df['TotalCharges'].std()
+df = df[(z_scores.abs() < 3)]
+
+# Create a new feature: convert 'Tenure in Months' to days for more granularity
+df['TenureinDays'] = df['Tenure in Months'] * 30
+
+# Initialize the StandardScaler to normalize data
+scaler = StandardScaler()
+
+# Apply scaling to selected columns
+df[['MonthlyCharge', 'TotalCharges', 'TenureinDays']] = scaler.fit_transform(df[['Monthly Charge', 'TotalCharges', 'TenureinDays']])
+
+# Split data into features (X) and target (y)
+X = df.drop('Churn Category', axis=1)
+y = df['Churn Category']
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Export the cleaned and processed dataset to a new CSV file
+df.to_csv("Cleaned_Telecom_Customer_Churn.csv", index=False)
+print("\nCleaned dataset saved as 'Cleaned_Telecom_Customer_Churn.csv'")
+        </pre>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const codeBlock = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(codeBlock).then(() => {
+                alert("Code copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy code: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
