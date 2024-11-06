@@ -38,121 +38,56 @@
             <h2>Python Code</h2>
             <button class="copy-btn" onclick="copyCode()">Copy Code</button>
             <pre><code id="codeBlock">
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.datasets import load_iris
-
-# Load the Iris dataset
-df = pd.read_csv("./datasets/iris.csv")
-# Load the Iris dataset or or
-
-#iris = load_iris()
-#df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
-#X = df
-
-# Select features for clustering (sepal_length, sepal_width, petal_length, petal_width)
-X = df.iloc[:, 1:-1]  # Exclude ID and species columns
-
-# Standardize the feature matrix (important for K-Means)
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Determine the optimal number of clusters using the elbow method
-inertia = []
-for k in range(1, 11):
-    kmeans = KMeans(n_clusters=k, random_state=42)
-    kmeans.fit(X_scaled)
-    inertia.append(kmeans.inertia_)
-
-# Plot the elbow curve
-plt.figure(figsize=(8, 6))
-plt.plot(range(1, 11), inertia, marker='o', linestyle='--')
-plt.xlabel('Number of Clusters')
-plt.ylabel('Inertia (Within-cluster Sum of Squares)')
-plt.title('Elbow Method for Optimal Number of Clusters')
-plt.grid()
-plt.show()
-
-'''K-Means is a popular clustering algorithm used
-to partition data into K distinct clusters based on feature similarity.
-
- Here are the steps involved:
-
-1. Choose the Number of Clusters (K):
-
- by using methods like the elbow method.
-
-2. Initialize Centroids:
-
-Randomly select K data points from the dataset as initial centroids (the center of each cluster).
-
-
-3. Assign Clusters:
-
-For each data point, calculate the distance to each centroid (using Euclidean distance is common) and assign the data point to the cluster with the nearest centroid.
-
-4. Update Centroids:
-
-Recalculate the centroids by taking the mean of all data points assigned to each cluster.
-
-5. Repeat:
-
-Repeat steps 3 and 4 until convergence is reached 
-
-
-
-6. Final Output:
-
-Once the algorithm has converged, the final clusters and centroids are returned.
-
-
-
-
-Elbow Method:
-
-The elbow method is a heuristic used to determine the optimal number of clusters (K) for K-Means clustering. Here's how it works:
-
-1. Calculate K-Means for a Range of K Values:
-
-Run the K-Means algorithm for a range of K values (e.g., from 1 to 10).
-
-
-
-2. Calculate the Sum of Squared Errors (SSE):
-
-For each value of K, calculate the sum of squared distances (errors) between each data point and its assigned centroid. This is also known as the within-cluster sum of squares (WCSS).
-
-
-
-3. Plot the Elbow Curve:
-
-Create a plot of the SSE against the number of clusters (K).
-
-
-
-4. Identify the Elbow Point:
-
-The plot will typically show a decrease in SSE as K increases. The point at which the decrease in SSE starts to slow down significantly (forming an "elbow" shape) indicates the optimal number of clusters. This is where adding more clusters provides diminishing returns on the reduction of SSE.
-
-
-
-
-
----
-
-Summary:
-
-K-Means is a simple yet effective clustering algorithm that involves initializing centroids, assigning clusters, updating centroids, and repeating until convergence.
-
-The elbow method helps determine the appropriate number of clusters by plotting the SSE and looking for an elbow point where adding more clusters yields less improvement in SSE.
-
-
-Using these methods, you can effectively cluster data and choose the number of clusters that best represents the underlying structure of the data.'''
-
+                import pandas as pd
+                import matplotlib.pyplot as plt
+                import seaborn as sns
+                from sklearn.cluster import KMeans
+                from sklearn.preprocessing import StandardScaler
+                
+                data = pd.read_csv("iris.csv") 
+                
+                X = data.drop(['Species'], axis=1) 
+                
+                # Standardize the data
+                scaler = StandardScaler()
+                X_scaled = scaler.fit_transform(X)
+                
+                # Elbow Method to determine optimal number of clusters
+                inertia = []
+                K = range(1, 11)  # Trying 1 to 10 clusters
+                
+                for k in K:
+                    kmeans = KMeans(n_clusters=k, random_state=1)
+                    kmeans.fit(X_scaled)
+                    inertia.append(kmeans.inertia_)
+                
+                # Plotting the elbow graph
+                plt.figure(figsize=(10, 6))
+                plt.plot(K, inertia, marker='o')
+                plt.xlabel('Number of Clusters')
+                plt.ylabel('Inertia')
+                plt.title('Elbow Method For Optimal k')
+                plt.show()
+                
+                
+                # Applying K-Means with the chosen number of clusters
+                optimal_k = 3  # Based on the elbow method
+                kmeans = KMeans(n_clusters=optimal_k, random_state=1)
+                clusters = kmeans.fit_predict(X_scaled)
+                
+                # Add the cluster labels to the original data and display
+                data['Cluster'] = clusters
+                print(data.head())
+                
+                # Visualize the clusters with species labels
+                plt.figure(figsize=(10, 6))
+                sns.scatterplot(x=X_scaled[:, 0], y=X_scaled[:, 1], hue=data['Species'], palette='viridis', marker='o')
+                plt.xlabel('Feature 1')
+                plt.ylabel('Feature 2')
+                plt.title('K-Means Clustering of Iris Dataset with True Labels')
+                plt.legend(title='Species')  # Add legend title for clarity
+                plt.show()
+                
             </code></pre>
         </section>
 
