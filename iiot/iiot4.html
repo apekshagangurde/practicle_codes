@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code with Copy Button</title>
+    <style>
+        /* Styling for the code block */
+        .code-container {
+            position: relative;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #333;
+            overflow: auto;
+        }
+
+        /* Styling for the copy button */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Hover effect for the copy button */
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Code block styling */
+        pre {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="code-container" id="code-block">
+    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+    <pre>
+# Security measures
+
+# Import necessary libraries
+import hashlib  # For hashing to ensure data integrity
+from cryptography.fernet import Fernet  # For encryption
+import random  # For simulating sensor data
+
+# Generate an encryption key
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+def get_sensor_data():
+    return random.uniform(50, 100)  # Random temperature between 50°C and 100°C
+
+# Encrypt the sensor data
+def encrypt_data(data, cipher):
+    return cipher.encrypt(data.encode())
+
+# Decrypt the sensor data
+def decrypt_data(encrypted_data, cipher):
+    return cipher.decrypt(encrypted_data).decode()
+
+# Verify data integrity using hashing
+def verify_data_integrity(data):
+    return hashlib.sha256(data.encode()).hexdigest()
+
+sensor_data = f"Temperature: {get_sensor_data():.2f}°C"
+print("Original Data:", sensor_data)
+
+# Encrypt and then decrypt the data
+encrypted_data = encrypt_data(sensor_data, cipher)
+print("Encrypted Data:", encrypted_data)
+
+decrypted_data = decrypt_data(encrypted_data, cipher)
+print("Decrypted Data:", decrypted_data)
+
+original_hash = verify_data_integrity(sensor_data)
+decrypted_hash = verify_data_integrity(decrypted_data)
+if original_hash == decrypted_hash:
+    print("Data Integrity Verified: Hashes match.")
+else:
+    print("Data Integrity Issue: Hashes do not match.")
+    </pre>
+</div>
+
+<script>
+    function copyCode() {
+        const code = document.getElementById("code-block").innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            alert("Code copied to clipboard!");
+        }).catch(err => {
+            console.error('Could not copy code:', err);
+        });
+    }
+</script>
+
+</body>
+</html>
