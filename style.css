@@ -5,12 +5,14 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    
+    padding: 80px; /* Added padding around the body for spacing */
     background-color: #f4f4f9;
 }
 
 .container {
     text-align: center;
+margin-top: 20;
 }
 
 button {

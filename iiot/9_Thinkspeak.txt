@@ -1,0 +1,21 @@
+import http.client , urllib.request,urllib.parse
+import RPi.GPIO as G
+
+key = 'QNHB1FXE2SWYHBBW' # copy the write API key
+pin = 35
+
+G.setmode(G.BOARD)
+G.setup(pin, G.IN)
+G.setwarnings(True)
+
+while True:
+    params=urllib.parse.urlencode({'field1':G.input(pin),'key':key})
+    #headers={"Content-type":"application/x-www-form-urlencoded","Accept":"text/plain"}
+    con=http.client.HTTPConnection("api.thingspeak.com")
+    con.request("POST","/update",params)
+
+    # this field is to disply the status nd all in terminal
+    response=con.getresponse()
+    print (response.status,response.reason)
+    data=response.read()
+    con.close()

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code with Copy Button</title>
+    <style>
+        /* Styling for the code block */
+        .code-container {
+            position: relative;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #333;
+            overflow: auto;
+        }
+
+        /* Styling for the copy button */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Hover effect for the copy button */
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Code block styling */
+        pre {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="code-container" id="code-block">
+    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+    <h1> data visualization </h1>
+    <pre>
+import matplotlib.pyplot as plt
+import seaborn as sns
+data = sns.load_dataset('diamonds')
+print(data.head())
+# Step 1: Visualize the distribution of diamond prices (this can represent industrial product prices)
+plt.figure(figsize=(10, 6))
+sns.histplot(data['price'], bins=30, kde=True)
+plt.title('Distribution of Diamond Prices')
+plt.xlabel('Price')
+plt.ylabel('Count')
+plt.tight_layout()
+plt.show()
+# Step 2: Boxplot of price by cut type (similar to comparing industry sectors)
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='cut', y='price', data=data)
+plt.title('Diamond Prices by Cut Quality')
+plt.xlabel('Cut Quality')
+plt.ylabel('Price')
+plt.tight_layout()
+plt.show()
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='carat', y='price', hue='cut', data=data)
+plt.title('Carat vs Price of Diamonds')
+plt.xlabel('Carat')
+plt.ylabel('Price')
+plt.tight_layout()
+plt.show()
+    </pre>
+</div>
+
+<script>
+    function copyCode() {
+        const code = document.getElementById("code-block").innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            alert("Code copied to clipboard!");
+        }).catch(err => {
+            console.error('Could not copy code:', err);
+        });
+    }
+</script>
+
+</body>
+</html>
