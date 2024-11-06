@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIR Sensor Code</title>
+  <style>
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>PIR Sensor Code</h1>
+<button onclick="copyCode()">Copy Code</button>
+<pre id="codeBlock">
+int pirPin = 2; // PIR sensor output pin
+int ledPin = 13; // LED pin
+int buzzerPin = 12; // Buzzer pin
+
+void setup() {
+  pinMode(pirPin, INPUT); // Set PIR sensor pin as input
+  pinMode(ledPin, OUTPUT); // Set LED pin as output
+  pinMode(buzzerPin, OUTPUT); // Set buzzer pin as output
+  Serial.begin(9600); // Initialize serial communication for debugging
+}
+
+void loop() {
+  int pirState = digitalRead(pirPin); // Read PIR sensor state
+
+  if (pirState == HIGH) {
+    digitalWrite(ledPin, HIGH); // Turn on LED
+    digitalWrite(buzzerPin, HIGH); // Turn on buzzer
+    Serial.println("Motion detected!"); // Print message to serial monitor
+  } else {
+    digitalWrite(ledPin, LOW); // Turn off LED
+    digitalWrite(buzzerPin, LOW); // Turn off buzzer
+    Serial.println("No motion."); // Print message to serial monitor
+  }
+
+  delay(1000); // Wait for a second before checking again
+}
+</pre>
+
+
+
+<script>
+  function copyCode() {
+    const code = document.getElementById('codeBlock').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      alert("Code copied to clipboard!");
+    }).catch(err => {
+      alert("Failed to copy code: ", err);
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Code Example</title>
+</head>
+<body>
+
+<h2>Python Code for IR Sensor and Email Notification</h2>
+<button onclick="copyCode()">Copy Code</button>
+<pre id="code">
+import RPi.GPIO as GPIO
+import time
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+SMTP_SERVER = 'smtp.gmail.com'
+SMTP_PORT = 587
+SMTP_USERNAME = 'kksupekar371121@kkwagh.edu.in'  
+SMTP_PASSWORD = 'Ksupekar@2003'  
+EMAIL_FROM = 'kksupekar371121@kkwagh.edu.in'  
+EMAIL_TO = 'darshankedare1815@gmail.com'  
+EMAIL_SUBJECT = 'Object Detected!'
+
+IR_SENSOR_PIN = 7
+LED_PIN = 11
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(IR_SENSOR_PIN, GPIO.IN)
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+def send_email():
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+
+        message = MIMEMultipart()
+        message['From'] = EMAIL_FROM
+        message['To'] = EMAIL_TO
+        message['Subject'] = EMAIL_SUBJECT
+        body = "An object has been detected by the IR sensor."
+        message.attach(MIMEText(body, 'plain'))
+
+        server.sendmail(EMAIL_FROM, EMAIL_TO, message.as_string())
+        server.quit()
+        print("Email sent successfully!")
+
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+try:
+    while True:
+        if GPIO.input(IR_SENSOR_PIN) == GPIO.LOW:
+            print("Object detected!")
+            GPIO.output(LED_PIN, GPIO.HIGH)
+            send_email()
+            time.sleep(1)
+        else:
+            print("No object detected.")
+            GPIO.output(LED_PIN, GPIO.LOW)
+       
+        time.sleep(0.5)
+
+except KeyboardInterrupt:
+    print("\nExiting program.")
+finally:
+    GPIO.cleanup()
+</pre>
+
+
+
+<script>
+function copyCode() {
+    var code = document.getElementById("code").innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        alert("Code copied to clipboard!");
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+    });
+}
+</script>
+
+</body>
+</html>

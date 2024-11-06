@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Code Example</title>
+</head>
+<body>
+
+<h2>Python Code for Sending Data to ThingSpeak</h2>
+<button onclick="copyCode()">Copy Code</button>
+<pre id="code">
+import http.client
+import urllib.parse
+
+key = 'G1UN993WDMN29NFU'  # Replace with the actual ThingSpeak API key
+
+t = 22  # Start temperature
+
+while True:
+    t += 1
+    print("temperature", t)
+    params = urllib.parse.urlencode({'field1': t, 'key': key})
+    headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+    con = http.client.HTTPConnection("api.thingspeak.com")
+    con.request("POST", "/update", params, headers)
+    response = con.getresponse()
+    print(response.status, response.reason)
+    data = response.read()
+    con.close()
+</pre>
+
+
+
+<script>
+function copyCode() {
+    var code = document.getElementById("code").innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        alert("Code copied to clipboard!");
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+    });
+}
+</script>
+
+</body>
+</html>
