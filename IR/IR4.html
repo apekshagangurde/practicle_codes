@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code with Copy Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        pre {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #copyButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #copyButton:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Python Code Example</h1>
+    <p>Click the button below to copy the Python code:</p>
+    <button id="copyButton">Copy Code</button>
+    <p id="copyMessage" class="message"></p>
+    <pre id="pythonCode">
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report
+import re
+
+# Load the dataset (replace 'emails.csv' with your actual file path)
+data = pd.read_csv('emails.csv')
+data.head()
+
+# Split the data into features (text) and target (spam)
+X = data['text']
+y = data['spam']
+
+# Convert text to numerical features using TF-IDF vectorization
+vectorizer = TfidfVectorizer()
+X_vectorized = vectorizer.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y, test_size=0.2, random_state=42)
+
+# Create an SVM classifier
+svm_classifier = SVC(kernel='linear')
+
+# Train the SVM classifier
+svm_classifier.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = svm_classifier.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Display classification report
+class_report = classification_report(y_test, y_pred, target_names=['Not Spam', 'Spam'])
+print("Classification Report:\n", class_report)
+
+# Define a function to classify email subjects
+def classify_email(subject):
+    cleaned_subject = re.sub(r'^Subject:\s*', '', subject)  # Remove "Subject:" prefix
+    vectorized_subject = vectorizer.transform([cleaned_subject])
+    prediction = svm_classifier.predict(vectorized_subject)
+    if prediction[0] == 1:
+        return "Spam"
+    else:
+        return "Not Spam"
+
+# Ask the user to enter an email subject
+user_input = input("Enter an email subject: ")
+classification_result = classify_email(user_input)
+print("Classification:", classification_result)
+    </pre>
+
+   
+    
+</div>
+
+<script>
+    // Get the copy button and the code block
+    var copyButton = document.getElementById('copyButton');
+    var pythonCode = document.getElementById('pythonCode');
+
+    // When the button is clicked, copy the code to the clipboard
+    copyButton.addEventListener('click', function() {
+        // Create a temporary textarea element
+        var tempTextArea = document.createElement('textarea');
+        tempTextArea.value = pythonCode.textContent; // Get the text from the pre tag
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy'); // Execute the copy command
+        document.body.removeChild(tempTextArea); // Remove the temporary textarea
+
+        // Show a confirmation message
+        var message = document.getElementById('copyMessage');
+        message.textContent = 'Code copied to clipboard!';
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IR5: PageRank Algorithm Code with Explanation</title>
+    <link rel="stylesheet" href="ir5.css">
+</head>
+<body>
+    <div class="container">
+        <h1>IR5: PageRank Algorithm Code with Explanation</h1>
+        <button onclick="copyCode()">Copy Code</button>
+        <div class="code-container">
+            <pre id="code">
+<span class="keyword">import</span> numpy as np
+
+<span class="keyword">def</span> page_rank(graph, damping_factor=<span class="number">0.85</span>, max_iterations=<span class="number">100</span>, tol=<span class="number">1e-6</span>):
+    <span class="comment"># Number of pages</span>
+    num_pages = len(graph)
+
+    <span class="comment"># Initialize the PageRank values</span>
+    pagerank = np.ones(num_pages) / num_pages
+
+    <span class="keyword">for</span> _ <span class="keyword">in</span> range(max_iterations):
+        new_pagerank = np.zeros(num_pages)
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(num_pages):
+            <span class="keyword">for</span> j <span class="keyword">in</span> range(num_pages):
+                <span class="keyword">if</span> graph[j][i]:
+                    new_pagerank[i] += pagerank[j] / sum(graph[j])
+
+        <span class="comment"># Apply damping factor and update PageRank</span>
+        new_pagerank = (1 - damping_factor) / num_pages + damping_factor * new_pagerank
+
+        <span class="comment"># Check for convergence</span>
+        <span class="keyword">if</span> np.linalg.norm(new_pagerank - pagerank) < tol:
+            <span class="keyword">return</span> new_pagerank
+
+        pagerank = new_pagerank
+
+    <span class="keyword">return</span> pagerank
+
+<span class="comment"># Example graph representing web page connections</span>
+<span class="comment"># Replace this with your own graph</span>
+web_graph = [
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>],
+    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],
+    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],
+    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]
+]
+
+pagerank_values = page_rank(web_graph)
+print(<span class="string">"PageRank values:"</span>, pagerank_values)
+            </pre>
+        </div>
+        
+       
+    <div>
+        <div class="video-section">
+            <h2>Introduction to PageRank Algorithm</h2>
+            <iframe width="100%" height="400" src="https://www.youtube.com/embed/cvzWSRt5W_U" title="PageRank Introduction" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="video-section">
+            <h2>PageRank Concepts and Applications</h2>
+            <iframe width="100%" height="400" src="https://www.youtube.com/embed/meonLcN7LD4" title="PageRank Concepts" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-section">
+            <h2>PageRank Concepts </h2>
+            <iframe width="100%" height="400" src="https://www.youtube.com/embed/CsvyPNdQAHg" title="PageRank Concepts" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+        <h2>Explanation of the Code:</h2>
+       
+   
+    <div class="container">
+        <h1>IR5: Key Ideas and Tools</h1>
+        
+        <section>
+            <h2>numpy:</h2>
+            <p><strong>numpy</strong> (imported as <code>np</code>) is a popular library in Python used for handling numbers, especially in grids (arrays) or matrices (like a spreadsheet).</p>
+            <p>For example, if you want an array of numbers all set to 1, <code>np.ones(5)</code> gives <code>[1, 1, 1, 1, 1]</code>.</p>
+            <p>In this code, numpy helps us create and update lists of numbers easily, making our calculations faster.</p>
+        </section>
+
+        <section>
+            <h2>What is PageRank?</h2>
+            <p><strong>PageRank</strong> is an algorithm to rank pages based on their links. Pages linked to by other important pages are considered more important, with this importance represented by a "rank" for each page.</p>
+        </section>
+
+        <section>
+            <h2>How PageRank Works in This Code</h2>
+            <ol>
+                <li><strong>Setting Up and Running the Code</strong></li>
+                <pre><code>import numpy as np  # Imports numpy library for managing numbers in lists</code></pre>
+                
+                <li><strong>The <code>page_rank</code> Function</strong></li>
+                <p>The function <code>page_rank(graph, damping_factor=0.85, max_iterations=100, tol=1e-6)</code> is where we calculate the ranks.</p>
+                <ul>
+                    <li><strong>graph</strong>: A list representing links between pages.</li>
+                    <li><strong>damping_factor</strong>: Probability of following links (default 85%).</li>
+                    <li><strong>max_iterations</strong>: Limits updates to prevent endless calculations.</li>
+                    <li><strong>tol</strong>: Sets how close values need to be to stop updating.</li>
+                </ul>
+                
+                <li><strong>Step 1 - Count Pages</strong></li>
+                <pre><code>num_pages = len(graph)  # Counts the pages in the graph</code></pre>
+
+                <li><strong>Step 2 - Initializing PageRank</strong></li>
+                <pre><code>pagerank = np.ones(num_pages) / num_pages  # Sets equal rank for each page</code></pre>
+
+                <li><strong>Step 3 - Updating Ranks</strong></li>
+                <p>The main logic to update PageRank values is in a loop, repeating until ranks stabilize.</p>
+                <pre><code>for _ in range(max_iterations):  # Loop through updates until stable
+    new_pagerank = np.zeros(num_pages)  # Zero rank to start each update
+    for i in range(num_pages):
+        for j in range(num_pages):
+            if graph[j][i]:
+                new_pagerank[i] += pagerank[j] / sum(graph[j])</code></pre>
+
+                <li><strong>Step 4 - Applying Damping Factor</strong></li>
+                <pre><code>new_pagerank = (1 - damping_factor) / num_pages + damping_factor * new_pagerank</code></pre>
+
+                <li><strong>Step 5 - Checking for Convergence</strong></li>
+                <pre><code>if np.linalg.norm(new_pagerank - pagerank) < tol:
+    return new_pagerank</code></pre>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Running the Example Graph</h2>
+            <p>The code below calculates the PageRank values for a given graph:</p>
+            <pre><code>web_graph = [
+    [0, 1, 1, 0],  # Page 0 has links from pages 1 and 2
+    [0, 0, 1, 0],  # Page 1 has links from page 2
+    [1, 0, 0, 1],  # Page 2 has links from pages 0 and 3
+    [0, 0, 1, 0]   # Page 3 has links from page 2
+]
+pagerank_values = page_rank(web_graph)
+print("PageRank values:", pagerank_values)</code></pre>
+            <p>This displays each page’s "importance" based on its links.</p>
+        </section>
+        
+    </div>
+</div>
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById("code").textContent;
+            navigator.clipboard.writeText(codeElement).then(() => {
+                alert("Code copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
